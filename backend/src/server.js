@@ -53,8 +53,8 @@ app.use(function (error, req, res, next) {
   res.status(500).json({ error: "Algo falló en el servidor" });
 });
 
-// Permite cambiar el puerto en despliegue; localmente usa 3000.
-const puerto = process.env.PUERTO || 3000;
+// Usa el puerto que asigna el proveedor de hosting; localmente conserva PUERTO o 3000.
+const puerto = process.env.PORT || process.env.PUERTO || 3000;
 
 // Conecta a MongoDB antes de aceptar peticiones para evitar responder con una base desconectada.
 conectar()
