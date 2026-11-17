@@ -31,4 +31,8 @@ Necesitas dejar abiertos tres procesos, cada uno en una terminal distinta. La ba
 
 Los archivos `.env` no se suben a GitHub porque contienen claves y credenciales. Los pasos completos y los comandos para Windows, macOS y Linux están en los README de backend y de IA.
 
+## Publicar en internet
+
+El repositorio incluye [`render.yaml`](render.yaml) para publicar la web, el backend y Ángel en Render. Sigue la [guía de despliegue público](docs/despliegue-publico.md). El alojamiento gratuito usa un subdominio de Render y puede tardar en responder tras periodos inactivos; un dominio `.com` propio se compra y configura aparte.
+
 > Este proyecto no reemplaza el apoyo psicológico o médico
