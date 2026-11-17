@@ -1,0 +1,40 @@
+services:
+  - type: web
+    name: sabores-del-alma
+    runtime: static
+    buildCommand: echo "Publicando el sitio"
+    staticPublishPath: frontend
+
+  - type: web
+    name: sabores-del-alma-api
+    runtime: node
+    plan: free
+    rootDir: backend
+    buildCommand: npm ci
+    startCommand: npm start
+    healthCheckPath: /api/salud
+    envVars:
+      - key: MONGODB_URI
+        sync: false
+      - key: JWT_SECRETO
+        generateValue: true
+      - key: FRONTEND_URL
+        value: https://sabores-del-alma.onrender.com
+      - key: CONFIAR_PROXY
+        value: "true"
+
+  - type: web
+    name: sabores-del-alma-ia
+    runtime: python
+    plan: free
+    rootDir: ai
+    buildCommand: pip install -r requirements.txt
+    startCommand: python -m uvicorn app:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /api/salud
+    envVars:
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: API_URL
+        value: http://sabores-del-alma-api:10000/api
+      - key: FRONTEND_URL
+        value: https://sabores-del-alma.onrender.com
