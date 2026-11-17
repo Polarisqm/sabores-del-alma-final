@@ -786,7 +786,7 @@ function respuestaLocal(mensaje) {
 
 async function pedirRespuestaIA(mensaje, previo) {
   // Envía el mensaje y el historial permitido a la API FastAPI de la carpeta ai/.
-  const respuesta = await fetch(IA_URL + "/asistente", {
+  const respuesta = await fetchConTiempoLimite(IA_URL + "/asistente", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ mensaje: mensaje, historial: previo })
@@ -1878,8 +1878,8 @@ async function cargarDesdeServidor() {
   let listaPostres;
   try {
     const [respEmociones, respPostres] = await Promise.all([
-      fetch(API_URL + "/emociones"),
-      fetch(API_URL + "/postres")
+      fetchConTiempoLimite(API_URL + "/emociones"),
+      fetchConTiempoLimite(API_URL + "/postres")
     ]);
     if (!respEmociones.ok || !respPostres.ok) return;
     listaEmociones = await respEmociones.json();

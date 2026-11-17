@@ -33,7 +33,7 @@ async function api(ruta, opciones) {
 
   let respuesta;
   try {
-    respuesta = await fetch(API_URL + ruta, {
+    respuesta = await fetchConTiempoLimite(API_URL + ruta, {
       method: opciones.metodo || "GET",
       headers: cabeceras,
       body: opciones.cuerpo ? JSON.stringify(opciones.cuerpo) : undefined

@@ -10,3 +10,14 @@ const API_URL = esLocal
 const IA_URL = esLocal
   ? "http://localhost:8000/api"
   : "https://sabores-del-alma-ia.onrender.com/api";
+
+// Los servicios gratuitos pueden tardar al despertar; cancela las solicitudes que excedan ese margen.
+async function fetchConTiempoLimite(url, opciones) {
+  const controlador = new AbortController();
+  const temporizador = setTimeout(function () { controlador.abort(); }, 70000);
+  try {
+    return await fetch(url, { ...opciones, signal: controlador.signal });
+  } finally {
+    clearTimeout(temporizador);
+  }
+}

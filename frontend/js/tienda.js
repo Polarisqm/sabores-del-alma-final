@@ -57,7 +57,7 @@ async function api(ruta, opciones) {
 
   let respuesta;
   try {
-    respuesta = await fetch(API_URL + ruta, {
+    respuesta = await fetchConTiempoLimite(API_URL + ruta, {
       method: opciones.metodo || "GET",
       headers: cabeceras,
       body: opciones.cuerpo ? JSON.stringify(opciones.cuerpo) : undefined
@@ -248,14 +248,20 @@ function textoAlergenos(postre) {
 }
 
 async function pintarTienda() {
-  // Construye las tarjetas de tienda con precios del servidor y desactiva compras no disponibles.
+  // Informa la espera antes de consultar el catálogo, que puede tardar si el servicio está dormido.
   const lista = document.getElementById("tienda-lista");
   const aviso = document.getElementById("tienda-aviso");
+  aviso.hidden = false;
+  aviso.textContent = "Consultando postres y disponibilidad…";
+  lista.innerHTML = "";
+
+  // Construye las tarjetas con precios del servidor y desactiva compras si no hay conexión.
   const conectado = await cargarPostres();
 
   aviso.hidden = conectado;
-  aviso.textContent = "No pudimos conectar con la tienda en este momento. Puedes mirar los postres, pero todavía no es posible comprar.";
-  lista.innerHTML = "";
+  aviso.textContent = conectado
+    ? ""
+    : "No pudimos conectar con la tienda en este momento. Puedes mirar los postres, pero todavía no es posible comprar.";
 
   Object.keys(emociones).forEach(function (clave) {
     const info = conectado ? postresApi.find(function (p) { return p.clave === clave; }) : null;
